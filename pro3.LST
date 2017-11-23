@@ -1,0 +1,121 @@
+C51 COMPILER V7.20   PRO3                                                                  11/22/2017 00:25:31 PAGE 1   
+
+
+C51 COMPILER V7.20, COMPILATION OF MODULE PRO3
+OBJECT MODULE PLACED IN pro3.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE pro3.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg51.h>
+   2          
+   3          sbit Fan=P2^0;
+   4          sbit Light=P2^1;
+   5          sbit TV=P2^2;
+   6          
+   7           char str;
+   8           char Charin=0;
+   9          
+  10          void delay(int time)
+  11          {
+  12   1       unsigned int i,j;
+  13   1       for(i=0;i<time;i++)
+  14   1       for(j=0;j<1275;j++);
+  15   1      }
+  16          
+  17          void Serialwrite(char byte)
+  18          {
+  19   1        SBUF=byte;
+  20   1        while(!TI);
+  21   1        TI=0;
+  22   1      }
+  23          
+  24          void Serialprintln(char *p)
+  25          {
+  26   1        while(*p)
+  27   1        {
+  28   2          Serialwrite(*p);
+  29   2          p++;
+  30   2        }
+  31   1        Serialwrite(0x0d);
+  32   1      }
+  33          
+  34          void Serialbegin()
+  35          {
+  36   1         TMOD=0x20;
+  37   1         SCON=0x50;
+  38   1         TH1=0xfd;
+  39   1         TR1=1;
+  40   1      }
+  41          
+  42          void main()
+  43          {
+  44   1        P2=0x00;
+  45   1        Serialbegin();
+  46   1        Serialprintln("System Ready...");
+  47   1        delay(50);
+  48   1        while(1)
+  49   1        {
+  50   2          while(!RI);
+  51   2          Charin=SBUF;
+  52   2          str=Charin;
+  53   2          RI=0;
+  54   2            if(str=='1')
+  55   2            {
+C51 COMPILER V7.20   PRO3                                                                  11/22/2017 00:25:31 PAGE 2   
+
+  56   3              Fan=1;
+  57   3              Serialprintln(" Fan ON");
+  58   3              delay(50);
+  59   3            }
+  60   2            else if(str=='2')
+  61   2            {
+  62   3              Fan=0;
+  63   3              Serialprintln(" Fan OFF");
+  64   3              delay(50);
+  65   3            }
+  66   2      
+  67   2             else if(str=='3')
+  68   2            {
+  69   3              Light=1;
+  70   3              Serialprintln(" Light ON");
+  71   3              delay(50);
+  72   3            }
+  73   2      
+  74   2             else if(str=='4')
+  75   2            {
+  76   3              Light=0;
+  77   3              Serialprintln(" Light OFF");
+  78   3              delay(50);
+  79   3            }
+  80   2      
+  81   2             else if(str=='5')
+  82   2            {
+  83   3              TV=1;
+  84   3              Serialprintln(" TV ON");
+  85   3              delay(50);
+  86   3            }
+  87   2      
+  88   2             else if(str=='6')
+  89   2            {
+  90   3              TV=0;
+  91   3              Serialprintln(" TV OFF");
+  92   3              delay(50);
+  93   3            }
+  94   2            str=0;
+  95   2        }
+  96   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    204    ----
+   CONSTANT SIZE    =     69    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
